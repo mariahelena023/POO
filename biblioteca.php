@@ -37,13 +37,27 @@ class Biblioteca {
     public static function consultarLeitor() {
         return self::$leitores;
     }
+
+    public static function deletarLivro($isbn){
+        self::$listaDeLivros = array_filter(self::$listaDeLivros, function($livro) use ($isbn) {
+            return $livro->getISBN() !== $isbn;
+        });
+    }
+
+    public static function deletarLeitor($cpf){
+        self::$leitores = array_filter(self::$leitores, function($leitor) use ($cpf) {
+            return $leitor->getCpf() !== $cpf;
+        });
+    }
+
+    public static function atualizarLivro($isbn, $argumentos){
+        foreach(self::$listaDeLivros as $livro) {
+            if($livro->getISBN() === $isbn) {
+                $livro->atualizar($argumentos);
+                break;
+            }
+        }
+    }
 }
-
-Biblioteca::cadastrarLivro("Dom Casmurro", "Machado de Assis", "123456789876", "1899");
-Biblioteca::cadastrarLeitor("Caique Fernandes", "123.123.123-12", "caique@gmail.com");
-
-echo "<pre>";
-var_dump(Biblioteca::$listaDeLivros); 
-echo "</pre>";
 
 ?>
