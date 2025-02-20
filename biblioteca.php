@@ -21,8 +21,16 @@ class Biblioteca {
     }
 
     public static function cadastrarLivro($titulo, $autor, $isbn, $ano){
-        $livro = new Livro($titulo, $autor, $isbn, $ano);
-        array_push(self::$listaDeLivros, $livro);
+        $argumentos = [
+            'titulo' => $titulo,
+            'autor' => $autor,
+            'isbn' => $isbn,
+            'ano' => $ano,
+            'genero' => $genero
+        ];
+
+        $livro = new Livro($argumentos);
+        return $livro;
     }
 
     public static function consultarLivro() {
@@ -60,4 +68,32 @@ class Biblioteca {
     }
 }
 
+
+
+$host = 'localhost';
+$nomeBancoDeDados = 'biblioteca143';
+$usuario = 'root';
+$password = '';
+
+$configuracao = "mysql:host=$host;dbname=$nomeBancoDeDados;charset=UTF8";
+
+$pdo = new PDO($configuracao, $usuario, $password);
+
+
+$sql = Biblioteca::cadastrarLivro("o auto da compadecida", "ariano suasssuna", "12345678901", "1234", "sla");
+
+$cursor = $pdo->prepare($sql);
+
+$cursor->execute();
+
+$resposta = $cursor->fetchAll();
+
+foreach($resposta as $livro){
+    echo "<div class='livro'><h2>Título: " . $livro['titulo'] . "</h2></div>";
+    echo "<div class='livro'><p>Autor: " . $livro['autor'] . "</p></div>";
+    echo "<div class='livro'><p>ISBN: " . $livro['isbn'] . "</p></div>";
+    echo "<div class='livro'><p>Ano: " . $livro['ano'] . "</p></div>";
+    echo "<div class='livro'><p>Livro: " . $livro['genero'] . "</p></div>";
+    echo "==========================================================";
+}
 ?>

@@ -22,11 +22,12 @@ class Livro implements Crud{
     }
 
     public function cadastrar($argumentos){
-        $this->titulo = $argumentos['titulo'];
-        $this->autor = $argumentos['autor'];
-        $this->isbn = $argumentos['isbn'];
-        $this->ano = $argumentos['ano'];
-        $this->status = "DISPONÍVEL";
+        $this -> titulo = $argumentos['titulo'];
+        $this -> autor = $argumentos['autor'];
+        $this -> isbn = $argumentos['isbn'];
+        $this -> ano = $argumentos['ano'];
+        $this -> genero = $argumentos['genero'];
+        return "INSERT INTO livro(titulo, autor, isbn, ano, genero) VALUES ('$this -> titulo', '$this -> autor', '$this -> isbn', '$this -> ano', '$this -> genero')";
     }
 
     public function ler(){
@@ -47,8 +48,7 @@ class Livro implements Crud{
     }
 
     public function deletar(){
-        // Use a biblioteca para deletar
-        Biblioteca::deletarLivro($this->isbn);
+
     }
 
     public function getTitulo(){
@@ -70,6 +70,30 @@ class Livro implements Crud{
     public function getStatusLivro(){
         return $this->status;
     }
+}
+
+
+$host = 'localhost';
+$nomeBancoDeDados = 'biblioteca143';
+$usuario = 'root';
+$password = '';
+
+$configuracao = "mysql:host=$host;dbname=$nomeBancoDeDados;charset=UTF8";
+$pdo = new PDO($configuracao, $usuario, $password);
+
+$cursor = $pdo->prepare($sql);
+
+$cursor->execute();
+
+$resposta = $cursor->fetchAll();
+
+foreach($resposta as $livro){
+    echo "<div class='livro'><h2>Título: " . $livro['titulo'] . "</h2></div>";
+    echo "<div class='livro'><p>Autor: " . $livro['autor'] . "</p></div>";
+    echo "<div class='livro'><p>ISBN: " . $livro['isbn'] . "</p></div>";
+    echo "<div class='livro'><p>Ano: " . $livro['ano'] . "</p></div>";
+    echo "<div class='livro'><p>Livro: " . $livro['genero'] . "</p></div>";
+    echo "==========================================================";
 }
 
 ?>
